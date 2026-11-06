@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public interface ISpawner
+public abstract class ISpawner : MonoBehaviour
 {
-    public void DoSpawn();
+    public abstract void DoSpawn();
 }

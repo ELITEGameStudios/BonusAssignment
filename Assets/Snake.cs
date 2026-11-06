@@ -11,16 +11,17 @@ public class Snake : MonoBehaviour
     public ISpawner playerSegmentSpawner;
 
     public int tickInterval = 45;
+    public int applesEaten = 0;
     private int currentTick;
-    private int applesEaten = 0;
 
     private List<PlayerSegment> segmentObjectList;
 
 
     public static Snake Instance {get; private set;}
-    void Start() {
+    void Awake() {
         if(Instance == null){Instance = this;}
         else if(Instance != this){Destroy(this);}
+
         segmentObjectList = new();
     }
 
@@ -42,6 +43,12 @@ public class Snake : MonoBehaviour
         if(currentTick <= 0){
             currentTick = tickInterval;
             DoMove();
+
+            for (int i = 0; i < segmentObjectList.Count; i++)
+            {
+                segmentObjectList[i].UpdateMe();
+            }
+
         }
 
     } 
@@ -51,8 +58,15 @@ public class Snake : MonoBehaviour
         segmentObjectList.Add(segment);
     }
 
+    public void KillSegment(PlayerSegment segment)
+    {
+        segmentObjectList.Remove(segment);
+        Destroy(segment.gameObject);
+    }
+
     public void BanishSegments()
     {
+        if(segmentObjectList.Count == 0) return;
         for (int i = segmentObjectList.Count-1; i <= 0; i--)
         {
             Destroy(segmentObjectList[i].gameObject);
@@ -66,13 +80,18 @@ public class Snake : MonoBehaviour
 
         float currentHorizontal = Input.GetAxisRaw("Horizontal");
         float currentVertical = Input.GetAxisRaw("Vertical");
-        if(currentHorizontal != 0){nextMovementInput = new Vector2(currentHorizontal / Mathf.Abs(currentHorizontal), 0);}
-        if(currentVertical != 0){nextMovementInput = new Vector2(0, currentVertical / Mathf.Abs(currentVertical));}
 
-
-        if(nextMovementInput.magnitude != 0){
-            nextMovementInput = nextMovementInput;
+        Vector2 candaditeMovement = new();
+        if(currentHorizontal != 0){candaditeMovement = new Vector2(currentHorizontal / Mathf.Abs(currentHorizontal), 0);}
+        if(currentVertical != 0){candaditeMovement = new Vector2(0, currentVertical / Mathf.Abs(currentVertical));}
+        if(candaditeMovement != Vector2.zero)
+        {
+            if(candaditeMovement * -1 != nextMovementInput)
+            {
+                nextMovementInput = candaditeMovement;
+            }
         }
+
     }
 
     void DoMove(){
@@ -87,12 +106,14 @@ public class Snake : MonoBehaviour
     }
 
     private void OnTriggerEnter2D(Collider2D other) {
+        Debug.Log("test");
         if(other.tag == "playerSegment")
         {
             GameStateManager.Instance.EndGame();
         }    
-        else if(other.tag == "fruit")
+        else if(other.gameObject == GameStateManager.Instance.fruit)
         {
+            Debug.Log("hi");
             Destroy(other.gameObject);
             GameStateManager.Instance.SummonNewApple();
         }    

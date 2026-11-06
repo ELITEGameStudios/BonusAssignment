@@ -2,15 +2,13 @@ using UnityEngine;
 
 public class PlayerSegment : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    [SerializeField] int ticks;
+    public void UpdateMe()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        ticks++;
+        if(ticks > Snake.Instance.applesEaten + 1)
+        {
+            Snake.Instance.KillSegment(this);
+        }
     }
 }

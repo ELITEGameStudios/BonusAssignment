@@ -1,10 +1,10 @@
 
 using UnityEngine;
 
-public class IFruitSpawner : MonoBehaviour, ISpawner
+public class IFruitSpawner : ISpawner
 {
     public GameObject fruitPrefab;
-    public void DoSpawn()
+    public override void DoSpawn()
     {
         GameObject fruit = Instantiate(
             fruitPrefab, 
