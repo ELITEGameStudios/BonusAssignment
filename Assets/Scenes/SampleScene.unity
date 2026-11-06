@@ -1062,6 +1062,10 @@ PrefabInstance:
       propertyPath: playerSegmentSpawner
       value: 
       objectReference: {fileID: 905471374}
+    - target: {fileID: 5645738535574988278, guid: b7e5116c4df3a6c45ada586790cfbfb2, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6640452449795087647, guid: b7e5116c4df3a6c45ada586790cfbfb2, type: 3}
       propertyPath: m_Name
       value: Player
